@@ -25,7 +25,7 @@ route.get("/:id", async (req, res) => {
     }
 }); 
 
-route.post("/:id", async (req, res) => {
+route.post("/", async (req, res) => {
     try {
        const {name, surname, email, pwd} = req.body;
        const data =  await createUserData(name, surname, email, pwd); 
