@@ -9,16 +9,15 @@ const getAllUserDataDB = async () => {
 };
 
 const getUserDataByIDDB = async (id) => {
-    const client = await pool.connect(id);
+    const client = await pool.connect();
     const sql = `SELECT * FROM users WHERE id = $1`;
     const result = (await client.query(sql, [id])).rows;
     return result;  
 };
 
 const createUserDataDB = async (name, surname, email, pwd) => {
-    
+    const client = await pool.connect();
     try {
-        const client = await pool.connect();
 
         await client.query("BEGIN");
     
@@ -35,8 +34,45 @@ const createUserDataDB = async (name, surname, email, pwd) => {
     }
 }
 
+const updateUserDataByIDDB = async (name, surname, email, pwd,id) => {
+    const client = await pool.connect();
+    try {
+        await client.query("BEGIN");
+    
+        const sql = `UPDATE users set name = $1, surname = $2, email = $3, pwd = $4 WHERE id = $5 returning *`;
+        const result = (await client.query(sql, [name, surname, email, pwd,id])).rows;
+
+        await client.query("COMMIT");
+
+        return result;
+    } catch (err) {
+        await client.query("ROLLBACK");
+        console.log(`updateUserDataByIDDB: ${err.message}`);
+        return null;
+    }
+}
+
+const deleteUserDataByIDDB = async (id) => {
+    const client = await pool.connect();
+    try {
+        await client.query("BEGIN");
+    
+        const sql = `DELETE  FROM users WHERE id = $1 returning *`;
+        const result = (await client.query(sql, [id])).rows;
+
+        await client.query("COMMIT");
+
+        return result;
+    } catch (err) {
+        await client.query("ROLLBACK");
+        console.log(`updateUserDataByIDDB: ${err.message}`);
+        return null;
+    }
+}
 module.exports = {
     getAllUserDataDB,
     getUserDataByIDDB,
-    createUserDataDB
+    createUserDataDB, 
+    updateUserDataByIDDB, 
+    deleteUserDataByIDDB
 };
