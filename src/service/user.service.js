@@ -1,29 +1,29 @@
-const {getAllUserDataDB, getUserDataByIDDB, createUserDataDB, updateUserDataByIDDB, deleteUserDataByIDDB} = require("../repository/user.repository");
+const {getAllUserDB, getUserByIDDB, createUserDB, updateUserByIDDB, deleteUserByIDDB} = require("../repository/user.repository");
 
 
-const getAllUserData = async () => {
-  const data = await getAllUserDataDB();
+const getAllUser = async () => {
+  const data = await getAllUserDB();
   return data;
 };
 
-const getUserDataByID = async (id) => {
-  const data = await getUserDataByIDDB(id);
+const getUserByID = async (id) => {
+  const data = await getUserByIDDB(id);
   return data;
 };
 
-const createUserData = async (name, surname, email, pwd) => {
-  const data = await createUserDataDB (name, surname, email, pwd);
+const createUser = async (name, surname, email, pwd) => {
+  const data = await createUserDB (name, surname, email, pwd);
   return data;
 };
 
-const updateUserDataByID = async (name, surname, email, pwd, id) => {
-  const data = await updateUserDataByIDDB (name, surname, email, pwd,id);
+const updateUserByID = async (name, surname, email, pwd, id) => {
+  const data = await updateUserByIDDB (name, surname, email, pwd,id);
   return data;
 };
 
-const deleteUserDataByID = async (id) => {
-  const data = await deleteUserDataByIDDB (id);
+const deleteUserByID = async (id) => {
+  const data = await deleteUserByIDDB (id);
   return data;
 };
 
-module.exports = {getAllUserData, getUserDataByID, createUserData, updateUserDataByID, deleteUserDataByID };
+module.exports = {getAllUser, getUserByID, createUser, updateUserByID, deleteUserByID };

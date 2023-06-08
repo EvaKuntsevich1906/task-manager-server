@@ -1,6 +1,6 @@
 const pool = require("../db");
 
-const getAllUserDataDB = async () => {
+const getAllUserDB = async () => {
     const client = await pool.connect();
     const sql = `SELECT * FROM users`;
     const result = (await client.query(sql)).rows;
@@ -8,14 +8,15 @@ const getAllUserDataDB = async () => {
 
 };
 
-const getUserDataByIDDB = async (id) => {
+
+const getUserByIDDB = async (id) => {
     const client = await pool.connect();
     const sql = `SELECT * FROM users WHERE id = $1`;
     const result = (await client.query(sql, [id])).rows;
     return result;  
 };
 
-const createUserDataDB = async (name, surname, email, pwd) => {
+const createUserDB = async (name, surname, email, pwd) => {
     const client = await pool.connect();
     try {
 
@@ -32,9 +33,9 @@ const createUserDataDB = async (name, surname, email, pwd) => {
         console.log(`createUserData: ${err.message}`);
         return null;
     }
-}
+};
 
-const updateUserDataByIDDB = async (name, surname, email, pwd,id) => {
+const updateUserByIDDB = async (name, surname, email, pwd,id) => {
     const client = await pool.connect();
     try {
         await client.query("BEGIN");
@@ -52,7 +53,7 @@ const updateUserDataByIDDB = async (name, surname, email, pwd,id) => {
     }
 }
 
-const deleteUserDataByIDDB = async (id) => {
+const deleteUserByIDDB = async (id) => {
     const client = await pool.connect();
     try {
         await client.query("BEGIN");
@@ -70,9 +71,9 @@ const deleteUserDataByIDDB = async (id) => {
     }
 }
 module.exports = {
-    getAllUserDataDB,
-    getUserDataByIDDB,
-    createUserDataDB, 
-    updateUserDataByIDDB, 
-    deleteUserDataByIDDB
+    getAllUserDB,
+    getUserByIDDB,
+    createUserDB,
+    updateUserByIDDB,
+    deleteUserByIDDB
 };
