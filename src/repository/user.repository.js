@@ -5,15 +5,13 @@ const getAllUserDB = async () => {
     const sql = `SELECT * FROM users`;
     const result = (await client.query(sql)).rows;
     return result;
-
 };
-
 
 const getUserByIDDB = async (id) => {
     const client = await pool.connect();
     const sql = `SELECT * FROM users WHERE id = $1`;
     const result = (await client.query(sql, [id])).rows;
-    return result;  
+    return result;
 };
 
 const createUserDB = async (name, surname, email, pwd) => {
@@ -66,14 +64,37 @@ const deleteUserByIDDB = async (id) => {
         return result;
     } catch (err) {
         await client.query("ROLLBACK");
-        console.log(`updateUserDataByIDDB: ${err.message}`);
+        console.log(`deleteUserDataByIDDB: ${err.message}`);
         return null;
     }
 }
+
+const patchUserByIDDB = async (id, clientData) => {
+    const client = await pool.connect();
+    try {
+        await client.query("BEGIN");
+        const sql1 = `SELECT * FROM users WHERE id = $1`;
+        const result = (await client.query(sql1, [id])).rows;
+    
+        const merge = {...result[0], ...clientData};
+        const sql2 = `UPDATE users set name = $2, surname, email = $3, pwd = $4  WHERE id = $1 returning *`;
+        const patchData = (await client.query(sql2, [merge, id])).rows;
+        
+        await client.query("COMMIT");
+       
+        return patchData;
+    }catch (err) {
+        await client.query("ROLLBACK");
+        console.log(`patchUserDataByIDDB: ${err.message}`);
+        return null;
+    }
+    }
+
 module.exports = {
     getAllUserDB,
     getUserByIDDB,
     createUserDB,
     updateUserByIDDB,
-    deleteUserByIDDB
+    deleteUserByIDDB,
+    patchUserByIDDB
 };
