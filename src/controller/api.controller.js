@@ -1,5 +1,5 @@
 const express = require("express"); 
-const {createUser} = require("../service/api.service")
+const {createUser, authorazationUser} = require("../service/api.service")
 const route = express.Router();
 
 route.post("/reg", async (req, res) => {
@@ -16,7 +16,7 @@ route.post("/reg", async (req, res) => {
 route.post("/auth", async (req, res) => {
     try {
        const {email, pwd} = req.body;
-       const data =  await authorazationUser (email, pwd);
+       const data =  await authorazationUser(email, pwd);
        res.send(data);
     } catch (err) {
         res.status(404).send(err.message)
